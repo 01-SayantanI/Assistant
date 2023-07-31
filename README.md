@@ -1,6 +1,9 @@
 # Assistant
 **This Python Voice Assistant with GUI is a user-friendly application designed to interact with users using voice commands and provides a graphical user interface (GUI) for easy control. The assistant is capable of performing various tasks based on user input.**
 
+![Screenshot (54)](https://github.com/01-SayantanI/Assistant/assets/140982719/b52e2047-f938-4a98-b6e9-911766b8805b)
+
+
 This Python Voice Assistant with GUI uses Tkinter to enable users to interact through voice commands. It performs tasks like Wikipedia searches,google searches, YouTube music playback, website opening, providing a fun and interactive voice-based experience.
 
 
