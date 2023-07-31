@@ -79,9 +79,9 @@ This project offers an engaging and functional voice assistant with a GUI, provi
 
 **This project is continuously evolving, and more features will be added over time. You can also contribute to the project by adding your own unique features and enhancements. Future planned features include email sending, reminders, calendar events, and more. If you have any new ideas or want to collaborate on enhancing the Voice Assistant's functionality, feel free to create pull requests or open issues on the repository. Contributions from the open-source community are warmly welcomed!**
 
-
-
-***code***
+**code**
+--------------
+# Import necessary libraries
 import pyttsx3
 import datetime
 import speech_recognition as sr
@@ -107,21 +107,21 @@ HEADING_FONT = ("white", 24, "bold")
 INSTRUCTION_FONT = ("Helvetica", 14)
 INSTRUCTION_FONT1 = ("Helvetica", 14)
 
-
+# Initialize text-to-speech engine
 engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
 engine.setProperty('voice', voices[0].id)
 
+# Global variables
+entry = None
+stop_flag = False  # Define the stop_flag variable at the top of the script
 
+# Function to speak the given text
 def speak(audio):
     engine.say(audio)
     engine.runAndWait()
 
-
-entry = None
-stop_flag = False  # Define the stop_flag variable at the top of the script
-
-
+# Function to greet the user based on the time of the day
 def wish_time():
     global entry
     x = entry.get()
@@ -136,28 +136,27 @@ def wish_time():
         speak('Good evening!')
     speak(f"{x} How can I help you?")
 
-
+# Function to listen to user's command from the microphone
 def take_command():
     recognizer = sr.Recognizer()
     with sr.Microphone() as source:
         print("Say something:")
-        speak("say something")
+        speak("Say something")
         recognizer.pause_threshold = 0.8
         recognizer.adjust_for_ambient_noise(source, duration=0.5)  # Adjust for 1 second of ambient noise
         audio = recognizer.listen(source)
 
     try:
         print("Recognizing...")
-        speak("recognizing")
+        speak("Recognizing")
         query = recognizer.recognize_google(audio, language='en-in')
         print(f"You said: {query}")
     except Exception as e:
-        # print(e)
         print("Say that again please...")
         return "None"
     return query
 
-
+# Function to perform different tasks based on user's query
 def perform_task():
     global stop_flag
     while not stop_flag:
@@ -195,108 +194,31 @@ def perform_task():
         elif 'open code' in query:
             code_path = "C:\\Users\\DELL\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe"
             os.startfile(code_path)
-
         elif 'joke' in query:
             speak(pyjokes.get_joke())
-
-
-        elif "where is" in query:
-            query = query.replace("where is", "")
-            location = query
-            speak("User asked to Locate")
-            speak(location)
-            webbrowser.open("https://www.google.nl/maps/place/" + location.replace(" ", "+"))
-
         elif "where is" in query:
             query = query.replace("where is", "")
             location = query.strip()
             speak("User asked to locate")
             speak(location)
             webbrowser.open("https://www.google.com/maps/place/" + location.replace(" ", "+"))
-
         elif 'exit' in query:
-            speak("thanks for giving your time")
+            speak("Thanks for giving your time.")
             stop_voice_assistant()
 
-
+# Function to stop the voice assistant
 def stop_voice_assistant():
     global stop_flag
     speak("Stopping the Voice Assistant.")
     stop_flag = True
 
-
+# Function to start the voice assistant
 def start_voice_assistant():
     global stop_flag
     wish_time()
     perform_task()
     stop_flag = False  # Reset the flag to False when starting the voice assistant
 
-
+# Function to create the main GUI window and handle button click events
 def main():
-    # Create the main GUI window
-    root = tk.Tk()
-    root.title("Voice Assistant")
-    root.geometry("500x700")
-    root.configure(bg=BG_COLOR)
-
-    def on_button_click():
-        global stop_flag
-        if not stop_flag:
-            stop_flag = False  # Reset the flag to False when starting the voice assistant
-            Thread(target=start_voice_assistant).start()
-        else:
-            stop_voice_assistant()
-
-    # Load and set the background image
-    background_image = Image.open(
-        "wallpaperflare.com_wallpaper.jpg")  # Replace "path/to/your/background_image.jpg" with the actual image file path
-    background_photo = ImageTk.PhotoImage(background_image)
-    background_label = ttk.Label(root, image=background_photo)
-    background_label.place(x=0, y=0, relwidth=1, relheight=1)
-
-    f1 = ttk.Frame(root)
-    f1.pack(pady=100)  # Add some padding to the frame to center it vertically
-
-    image2 = Image.open("p.jpg")  # Replace "path_to_image2.jpg" with the actual path to your image
-    resized_image = image2.resize((120, 120))
-    p2 = ImageTk.PhotoImage(resized_image)
-    l2 = ttk.Label(f1, image=p2, relief=SUNKEN)
-    l2.pack(side="top", fill="both")
-
-    # Heading
-    heading_label = ttk.Label(root, text="Voice Assistant", font=HEADING_FONT, background=BG_COLOR)
-    heading_label.pack(pady=20)
-
-    global entry
-    f1 = ttk.Frame(root)
-    f1.pack()
-    l1 = ttk.Label(f1, text="Enter Your Name", font=INSTRUCTION_FONT, background=BG_COLOR)
-    l1.pack(side=LEFT, fill=BOTH)
-    entry = ttk.Entry(f1, width=30)
-    entry.pack(pady=10)
-
-    # Instruction
-    instruction_label = ttk.Label(root, text="Click the button below to start the Voice Assistant .",
-                                  font=INSTRUCTION_FONT, background=BG_COLOR)
-    instruction_label.pack(pady=10)
-
-    instruction_label1 = ttk.Label(root, text="Say exit to stop the assistant",
-                                  font=INSTRUCTION_FONT1,foreground="white",background="black")
-    instruction_label1.pack(pady=10)
-
-
-    # Create and place a button on the GUI
-    button = ttk.Button(root, text="Start Voice Assistant", command=on_button_click,
-                        style="VoiceAssistant.TButton")
-    button.pack(pady=20)
-
-    # Style the button
-    style = ttk.Style(root)
-    style.configure("VoiceAssistant.TButton", font=BUTTON_FONT, background=BUTTON_COLOR, foreground=BUTTON_FOREGROUND)
-
-    # Run the GUI main loop
-    root.mainloop()
-
-
-if __name__ == "__main__":
-    main()
+    # Create the main GUI
